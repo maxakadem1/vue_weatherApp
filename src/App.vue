@@ -1,11 +1,17 @@
+<!-- HTML -->
 <template>
-  <div id="app">
+  <div
+    id="app"
+    :class="
+      typeof weather.main != 'undefined' && weather.main.temp > 16 ? 'warm' : ''
+    "
+  >
     <main>
       <div class="search-box">
         <input
           type="text"
           class="search-bar"
-          placeholder="Search..."
+          placeholder="Type city name"
           v-model="query"
           @keypress="fetchWeather"
         />
@@ -15,7 +21,7 @@
           <div class="location">
             {{ weather.name }}, {{ weather.sys.country }}
           </div>
-          <div class="date">Monday, 20 January, 2022</div>
+          <div class="date">{{ dateBuilder() }}</div>
         </div>
 
         <div class="weather-box">
@@ -27,10 +33,12 @@
   </div>
 </template>
 
+<!-- SCRIPTS -->
 <script>
 export default {
   name: "App",
   data() {
+    //fetching API from openweathermap.org
     return {
       api_key: "7f40938131da6e5fe5ebeaea4fe2d0da",
       url_base: "https://api.openweathermap.org/data/2.5/",
@@ -53,6 +61,7 @@ export default {
     setResults(results) {
       this.weather = results;
     },
+    //creating dates for the weather
     dateBuilder() {
       let d = new Date();
       let months = [
@@ -88,6 +97,7 @@ export default {
 };
 </script>
 
+<!-- STYLING -->
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
 
@@ -105,6 +115,10 @@ body {
   background-size: cover;
   background-position: bottom;
   transition: 0.4s;
+}
+
+#app.warm {
+  background-image: url("./assets/warm-bg.jpg");
 }
 
 main {
